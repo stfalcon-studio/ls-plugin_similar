@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+    <name>
+        <lang name="default">Similar topics</lang>
+        <lang name="russian">Похожие записи</lang>
+        <lang name="ukrainian">Схожі записи</lang>
+    </name>
+    <author>
+        <lang name="default">Web-studio stfalcon.com</lang>
+    </author>
+    <homepage>http://stfalcon.com/</homepage>
+    <version>0.2.0</version>
+    <requires>
+        <livestreet>0.4.2</livestreet>
+        <plugins>
+
+        </plugins>
+    </requires>
+    <description>
+        <lang name="default">Display a list of similar topics.</lang>
+        <lang name="russian">Выводит список похожих записей.</lang>
+        <lang name="ukrainian">Виводить список схожих записів.</lang>
+    </description>
+    <delegate>
+        <module></module>
+        <action></action>
+        <template></template>
+        <entity></entity>
+    </delegate>
+</plugin>
