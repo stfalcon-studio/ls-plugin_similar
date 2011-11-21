@@ -19,6 +19,7 @@ class PluginSimilar extends Plugin {
          * @return boolean
          */
 	public function Activate() {
+		$this->Cache_Clean();
 		return true;
 	}
 
@@ -34,6 +35,7 @@ class PluginSimilar extends Plugin {
          * @return boolean
          */
 	public function Deactivate() {
+		$this->Cache_Clean();
 		return true;
 	}
 }

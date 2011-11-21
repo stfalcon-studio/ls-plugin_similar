@@ -41,7 +41,7 @@ class PluginSimilar_ModuleSimilar_MapperSimilar extends Mapper
                     topic.topic_publish = 1
                     AND topic_tag.topic_id = topic.topic_id
                     AND topic_tag_text IN (?a)
-                    AND topic.topic_lang = '" . mysql_real_escape_string($sLang) . "'
+                    { AND topic.topic_lang = ? }
                 GROUP BY
                     topic_tag.topic_id
                 ORDER BY
