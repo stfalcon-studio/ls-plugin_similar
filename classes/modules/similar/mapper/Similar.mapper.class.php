@@ -48,7 +48,7 @@ class PluginSimilar_ModuleSimilar_MapperSimilar extends Mapper
                     tags_count DESC, " .
                 ($sOrderBy == "rating" ? "topic.topic_rating" : "topic.topic_date_edit");
 
-        if ($sOrderByDirection == 1) {
+        if ($iOrderByDirection == 1) {
             $sql .= " DESC";
         }
 
