@@ -12,13 +12,12 @@
  * ----------------------------------------------------------------------------
  */
 
-class PluginSimilar_ModuleSimilar extends Module
-{
+class PluginSimilar_ModuleSimilar extends Module {
 
-    private $oCurrentTopic;
-    private $oMaxSimilarTopicsCount;
-    private $oOrderBy;
-    private $oOrderByDirection;
+    /**
+     *
+     * @var PluginSimilar_ModuleSimilar_MapperSimilar
+     */
     protected $oMapper;
 
     /**
@@ -28,80 +27,53 @@ class PluginSimilar_ModuleSimilar extends Module
      */
     public function Init() {
         $this->oMapper = Engine::GetMapper(__CLASS__);
-        $this->oMaxSimilarTopicsCount = Config::Get('plugin.similar.max_topics_count');
-        $this->oOrderBy = Config::Get('plugin.similar.topics_order_by');
-        $this->oOrderByDirection = Config::Get('plugin.similar.topics_order_by_direction');
     }
 
-    /**
-     * Установить текущий топик
-     *
-     * @param ModuleTopic_EntityTopic $currentTopic
-     * @return void
-     */
-    public function setCurrentTopic(ModuleTopic_EntityTopic $currentTopic) {
-        $this->oCurrentTopic = $currentTopic;
-    }
-
-    /**
-     * Возвращает топики похожие на текущий топик
-     *
-     * @return array
-     */
-    public function getSimilarForCurrentTopic() {
-        if ($this->oCurrentTopic == null) {
-            return array();
-        }
-        return $this->getSimilarForTopicByTags($this->oCurrentTopic, $this->oMaxSimilarTopicsCount);
-    }
-
+   
     /**
      * Возвращает похожие записи для объекта топика (по тегам)
      *
-     * @param ModuleTopic_EntityTopic $currentTopic
-     * @param integer $countTopics
+     * @param ModuleTopic_EntityTopic $oTopic
+     *
      * @return array
      */
-    protected function getSimilarForTopicByTags(ModuleTopic_EntityTopic $currentTopic, $countTopics=10) {
-        if ($currentTopic == null) {
+    public function getSimilarTopicsForTopic(ModuleTopic_EntityTopic $oTopic) {
+        if ($oTopic == null) {
             return array();
         }
+//        Вытаскиваем переменные с файлов Config
+//        Максимальное количество топиков, которое выводится в блоке - iCountTopics
+//        По какому параметру сортировать записи - sOrderBy
+//        Как сортировать топики в выдаче
+        
+        $iCountTopics = Config::Get('plugin.similar.max_topics_count');
+        $sOrderBy = Config::Get('plugin.similar.topics_order_by');
+        $iOrderByDirection = Config::Get('plugin.similar.topics_order_by_direction');
 
         $sLang = null;
 
-        if (in_array('l10n', $this->oEngine->Plugin_GetActivePlugins())) {
+        if (in_array('l10n', $this->Plugin_GetActivePlugins())) {
             $sLang = $this->PluginL10n_L10n_GetLangForQuery();
         }
 
         // Генерируем ключ для кеша
-        $key = "simular_topics_by_tags_for_" . $currentTopic->getId() . ($sLang ? "_{$sLang}" : "")
-                . "_{$countTopics}_{$this->oOrderBy}_{$this->oOrderByDirection}";
+        $key = "simular_topics_by_tags_for_" . $oTopic->getId() . ($sLang ? "_{$sLang}" : "")
+                . "_{$iCountTopics}_{$sOrderBy}_{$iOrderByDirection}";
+
+        if (!$aTopicIds = $this->Cache_Get($key)) {
+            $aTopicIds = $this->oMapper->getTopicIdForTags(
+                    $oTopic->getTagsArray(), $iCountTopics + 1, $sOrderBy, $iOrderByDirection, $sLang
+            );
+            unset($aTopicIds[array_search($oTopic->getId(), $aTopicIds)]);
+            // Кешируем массив топиков на один час
+            $this->Cache_Set($aTopicIds, $key, array('topic_update'), 60 * 10);
+        }
         // Пытаемся вытянуть массив топиков из кеша
-        if ($content = $this->Cache_Get($key)) {
-            return $content;
-        }
-
         // Массив id'шек топиков похожих на текущий
-        $topicsId = $this->oMapper->getTopicIdForTags(
-                $currentTopic->getTagsArray(), $countTopics + 1, $this->oOrderBy, $this->oOrderByDirection, $sLang
-        );
-
         // Достаем топики вместе с дополнительной информацией (автор, блог и т.д.)
-        $topics = $this->Topic_GetTopicsAdditionalData($topicsId, array('user' => array(), 'blog' => array('owner' => array())));
+        $aTopics = $this->Topic_GetTopicsAdditionalData($aTopicIds, array('user' => array(), 'blog' => array('owner' => array())));
 
-        $returnValue = array();
-        if (is_array($topics)) {
-            foreach ($topics as $iTopicId => $oTopic) {
-                if ($oTopic->getId() != $currentTopic->getId()) {
-                    $returnValue[] = $oTopic;
-                }
-            }
-        }
-
-        // Кешируем массив топиков на один час
-        $this->Cache_Set($returnValue, $key, array('topic_update'), 60 * 10);
-
-        return $returnValue;
+        return $aTopics;
     }
 
 }
