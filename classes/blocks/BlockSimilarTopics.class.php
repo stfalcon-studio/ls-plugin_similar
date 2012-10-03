@@ -20,8 +20,8 @@ class PluginSimilar_BlockSimilarTopics extends Block
      * @return void
      */
     public function Exec() {
-        $this->PluginSimilar_Similar_setCurrentTopic($this->GetParam('oTopic'));
-        $this->Viewer_Assign('aSimilarTopics', $this->PluginSimilar_Similar_getSimilarForCurrentTopic());
+        $oTopic = $this->GetParam('oTopic');
+        $this->Viewer_Assign('aSimilarTopics', $this->PluginSimilar_Similar_getSimilarTopicsForTopic($oTopic));
     }
 
 }
