@@ -8,14 +8,12 @@
 ИСТОРИЯ ВЕРСИЙ
 --------------
 
-v0.4.0
-- Плагин адаптирован для работы с LiveStreet v1.0.1
-
-v0.3.5
-- Это последняя версия, которая работает с LiveStreet v0.5.1. Скачать её можно по ссылке  https://github.com/stfalcon-studio/ls-plugin_similar/zipball/ls-0.5.1
+v0.3.0
+- Плагин адаптирован для работы с LiveStreet v1.0 и темы new, synio
 
 v0.2.0
 - Добавлена поддержка плагина "L10n"
+- Это последняя версия, которая работает с LiveStreet v0.5.1. Скачать её можно по ссылке  https://github.com/stfalcon-studio/ls-plugin_similar/zipball/ls-0.5.1
 
 v0.1.0
 - Релиз плагина
