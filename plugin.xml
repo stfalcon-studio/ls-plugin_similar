@@ -12,19 +12,10 @@
     <version>0.3.0</version>
     <requires>
         <livestreet>1.0</livestreet>
-        <plugins>
-
-        </plugins>
     </requires>
     <description>
-        <lang name="default">Display a list of similar topics.</lang>
-        <lang name="russian">Выводит список похожих записей.</lang>
-        <lang name="ukrainian">Виводить список схожих записів.</lang>
+        <lang name="default">Displays in the sidebar list of similar topics. Useful for SEO</lang>
+        <lang name="russian">При просмотре топика выводит список похожих записей в сайдбаре. Полезно для SEO (перелинковка)</lang>
+        <lang name="ukrainian">При перегляді топіку виводить список схожих записів в сайдбарі. Корисно для SEO (перелінковка)</lang>
     </description>
-    <delegate>
-        <module></module>
-        <action></action>
-        <template></template>
-        <entity></entity>
-    </delegate>
 </plugin>
