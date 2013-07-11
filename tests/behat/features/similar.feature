@@ -23,4 +23,19 @@ Feature: ls-plugin-similar-plugins
       | value |
       | Similar articles |
 
+  Scenario: Chech similar for draft topic
+  # check for similar for draft topic 4
+    Given I am on "/login"
+    Then I want to login as "admin"
 
+    Given I am on "/topic/add"
+    Then I select "Gadgets" from "blog_id"
+    When I fill in "topic_title" with "My custome draft topic"
+    When I fill in "topic_text" with "draft topic text draft topic text draft topic text draft topic text"
+    When I fill in "topic_tags" with "sony"
+    When I press "submit_topic_save"
+
+    Given I am on "/blog/3.html"
+    Then I should not see in element by css "sidebar" values:
+      | value |
+      | My custome draft topic |
