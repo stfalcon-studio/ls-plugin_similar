@@ -4,6 +4,8 @@ Feature: ls-plugin-similar-plugins
 
   Scenario: Chech similar for topic who have 1 similar
     # check for similar of topic 1
+    Given I load fixtures for plugin "similar"
+
     Given I am on "blog/3.html"
     Then the response status code should be 200
 
@@ -32,3 +34,12 @@ Feature: ls-plugin-similar-plugins
     Then I should not see in element by css "sidebar" values:
       | value |
       | Draft Topic |
+
+  Scenario: Chech similar for draft topic
+  # plugin fixture loading
+    Given I load fixtures for plugin "similar"
+    Given I am on "/login"
+    Then I want to login as "user-golfer"
+    Then I should see in element by css "content" values:
+      | value |
+      | Normal Topic + 3 days to date |
