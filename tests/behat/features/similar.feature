@@ -26,20 +26,17 @@ Feature: ls-plugin-similar-plugins
       | Similar articles |
 
   Scenario: Chech similar for draft topic
-  # check for similar for draft topic 4
-    Given I am on "/login"
-    Then I want to login as "admin"
-
+  # check for similar for draft topic 3
     Given I am on "/blog/3.html"
     Then I should not see in element by css "sidebar" values:
       | value |
       | Draft Topic |
 
-  Scenario: Chech similar for draft topic
+  Scenario: Chech similar for normal topic in future data
   # plugin fixture loading
     Given I load fixtures for plugin "similar"
-    Given I am on "/login"
-    Then I want to login as "user-golfer"
-    Then I should see in element by css "content" values:
+
+    Given I am on "/blog/3.html"
+    Then I should not see in element by css "sidebar" values:
       | value |
       | Normal Topic + 3 days to date |
