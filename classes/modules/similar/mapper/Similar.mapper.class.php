@@ -29,7 +29,25 @@ class PluginSimilar_ModuleSimilar_MapperSimilar extends Mapper
         if (empty($aTags)) {
             return array();
         }
-
+/*
+SELECT
+                    topic_tag.topic_id,
+                    topic.topic_rating,
+                    COUNT(*) AS `tags_count`
+                FROM
+                    `prefix_topic_tag` AS topic_tag,
+                    `prefix_topic` AS topic
+                WHERE
+                    topic.topic_publish = 1
+                    AND topic_tag.topic_id = topic.topic_id
+                    AND topic_tag_text IN (?a)
+                    AND topic.topic_date_add <= NOW()
+                    { AND topic.topic_lang = ? }
+                GROUP BY
+                    topic_tag.topic_id
+                ORDER BY
+                    tags_count DESC, topic.topic_rating
+ */
         $sql = "SELECT
                     topic_tag.topic_id,
                     topic.topic_rating,
@@ -41,6 +59,7 @@ class PluginSimilar_ModuleSimilar_MapperSimilar extends Mapper
                     topic.topic_publish = 1
                     AND topic_tag.topic_id = topic.topic_id
                     AND topic_tag_text IN (?a)
+                    AND topic.topic_date_add <= NOW()
                     { AND topic.topic_lang = ? }
                 GROUP BY
                     topic_tag.topic_id
